@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="praktika.EmployeeAdd"
+        Icon="/assets/logo.png"
+        Title="Добавить сотрудника">
+    <StackPanel Margin="10">
+        <TextBlock Text="Фамилия:"/>
+        <TextBox x:Name="txtLastName" Width="400"/>
+        
+        <TextBlock Text="Имя:"/>
+        <TextBox x:Name="txtFirstName" Width="400"/>
+        
+        <TextBlock Text="Должность:"/>
+        <TextBox x:Name="txtPosition" Width="400"/>
+        
+        <TextBlock Text="Email:"/>
+        <TextBox x:Name="txtEmail" Width="400"/>
+        
+        <TextBlock Text="Телефон:"/>
+        <TextBox x:Name="txtPhone" Width="400"/>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <Button Content="Сохранить" Click="Save_Click" Margin="0,0,10,0"/>
+            <Button Content="Отмена" Click="Cancel_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="praktika.ProjectAdd"
+        Icon="/assets/logo.png"
+        Title="Добавить проект">
+    <StackPanel Margin="10">
+        <TextBlock Text="Название проекта:"/>
+        <TextBox x:Name="txtProjectName" Width="700"/>
+        
+        <TextBlock Text="Клиент:"/>
+        <ComboBox x:Name="cmbClients" DisplayMemberBinding="{Binding ClientName}" x:CompileBindings="False"/>
+        
+        <TextBlock Text="Дата начала:"/>
+        <DatePicker x:Name="dpStartDate"/>
+        
+        <TextBlock Text="Дата завершения:"/>
+        <DatePicker x:Name="dpEndDate"/>
+        
+        <TextBlock Text="Статус:"/>
+        <ComboBox x:Name="cmbStatus" DisplayMemberBinding="{Binding StatusName}" x:CompileBindings="False"/>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <Button Content="Сохранить" Click="Save_Click" Margin="0,0,10,0"/>
+            <Button Content="Отмена" Click="Cancel_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

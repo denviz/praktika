@@ -17,10 +17,13 @@ public partial class Employee
 
     public string EmpPhone { get; set; } = null!;
 
+    public string? MiddleName { get; set; }
+
+    public string? Fullname { get; set; }
+
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 
     public virtual ICollection<Specification> Specifications { get; set; } = new List<Specification>();
 
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
-    public string FullName=> $"{LastName} {FirstName}";
 }

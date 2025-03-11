@@ -4,7 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="praktika.TablesMain"
-        Title="praktika">
+        Icon="/assets/logo.png"
+        Title="Администрирование базы данных Айдентика" 
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        MinWidth="850" MinHeight="430">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -15,22 +19,23 @@
 
         <StackPanel Orientation="Horizontal">
             <TextBlock Margin="10" VerticalAlignment="Center">Выберите таблицу:</TextBlock>
-            <ComboBox Margin="10" x:Name="cmbTables" Width="130" SelectionChanged="cmbTables_SelectionChanged"/>
+            <ComboBox Margin="10" x:Name="cmbTables" SelectionChanged="cmbTables_SelectionChanged"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Margin="10" x:Name="btnCreate" Click="BtnCreate_OnClick" Content="Добавить"/>
-            <Button x:Name="btnDelete" Click="btnDelete_click" Content="Удалить"/>
+            <Button Margin="10" x:Name="btnEdit" Click="btnEdit_Click" Content="Редактировать"/>
+            <Button Margin="10" x:Name="btnDelete" Click="btnDelete_click" Content="Удалить"/>
             <Button Margin="10" x:Name="btnFilter" Click="btnFilter_Click" Content="Фильтровать"/>
-            <Button x:Name="btnAll" Click="btnAll_Click" Content="Показать все"/>
+            <Button Margin="10" x:Name="btnAll" Click="btnAll_Click" Content="Показать все"/>
         </StackPanel>
         
         <StackPanel x:Name="PanelFilter" Grid.Row="2" Margin="10" Orientation="Horizontal" IsVisible="True">
             <TextBox x:Name="txtFilter" Width="250" Watermark="Введите текст для фильтрации" Margin="10" IsVisible="True"/>
-            <ComboBox x:Name="cmbFilterProjects" Width="300" Margin="10" x:CompileBindings="False" DisplayMemberBinding="{Binding ProjectName}" IsVisible="False"/>
-            <ComboBox x:Name="cmbFilterEmployees" Width="300" Margin="10" x:CompileBindings="False" DisplayMemberBinding="{Binding LastName}" IsVisible="False"/>
+            <ComboBox x:Name="cmbFilterProjects" MinWidth="400"  Margin="10" x:CompileBindings="False" DisplayMemberBinding="{Binding ProjectName}" IsVisible="False"/>
+            <ComboBox x:Name="cmbFilterEmployees" MinWidth="400"  Margin="10" x:CompileBindings="False" DisplayMemberBinding="{Binding LastName}" IsVisible="False"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="3" x:Name="dataGridContent" AutoGenerateColumns="False" ColumnWidth="Auto" IsReadOnly="True"/>
+        <DataGrid Grid.Row="3" x:Name="dataGridContent" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" HorizontalAlignment="Stretch" MaxWidth="1800"/>
     </Grid>
 </Window>

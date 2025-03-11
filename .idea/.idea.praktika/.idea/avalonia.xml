@@ -3,8 +3,15 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="praktika/AdCompanyAdd.axaml" value="praktika/praktika.csproj" />
+        <entry key="praktika/App.axaml" value="praktika/praktika.csproj" />
+        <entry key="praktika/ClientAdd.axaml" value="praktika/praktika.csproj" />
+        <entry key="praktika/EmployeeAdd.axaml" value="praktika/praktika.csproj" />
         <entry key="praktika/MainWindow.axaml" value="praktika/praktika.csproj" />
+        <entry key="praktika/ProjectAdd.axaml" value="praktika/praktika.csproj" />
+        <entry key="praktika/ProjectEdit.axaml" value="praktika/praktika.csproj" />
         <entry key="praktika/TablesMain.axaml" value="praktika/praktika.csproj" />
+        <entry key="praktika/TaskAdd.axaml" value="praktika/praktika.csproj" />
       </map>
     </option>
   </component>

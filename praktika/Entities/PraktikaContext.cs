@@ -100,9 +100,15 @@ public partial class PraktikaContext : DbContext
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .HasColumnName("first_name");
+            entity.Property(e => e.Fullname)
+                .HasMaxLength(30)
+                .HasColumnName("fullname");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .HasColumnName("last_name");
+            entity.Property(e => e.MiddleName)
+                .HasMaxLength(30)
+                .HasColumnName("middle_name");
             entity.Property(e => e.Position)
                 .HasMaxLength(100)
                 .HasColumnName("position");

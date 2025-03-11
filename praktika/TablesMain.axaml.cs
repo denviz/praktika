@@ -45,7 +45,7 @@ public partial class TablesMain : Window
     }
     
     // для уменьшения дублирования кода
-    private void VisibleFilter(bool visibleFilter)
+    private void VisibleFilterAndButton(bool visibleFilter=true, bool visibleButtonCreate=true, bool visibleButtonEdit = false)
     {
         PanelFilter.IsVisible = true;
         if (visibleFilter)
@@ -60,67 +60,96 @@ public partial class TablesMain : Window
             cmbFilterProjects.IsVisible = true;
             cmbFilterEmployees.IsVisible = false;
         }
+        
+        if (visibleButtonCreate)
+        {
+            btnCreate.IsVisible = true;
+            btnEdit.IsVisible = true;
+        }
+        else
+        {
+            btnCreate.IsVisible = false;
+        }
+
+        if (visibleButtonEdit)
+        {
+            btnEdit.IsVisible = true;
+        }
+        else
+        {
+            btnEdit.IsVisible = false;
+        }
     }
     
+    // вспомогательная загрузка таблиц
      private void ConfigureDataGrid(string tableName)
     {
         dataGridContent.Columns.Clear(); // Очистить старые колонки
-
+        cmbFilterProjects.SelectedItem = null;
+        cmbFilterEmployees.SelectedItem = null;
+        txtFilter.Clear();
         switch (tableName)
         {
             case "Projects":
-                VisibleFilter(true);
+                VisibleFilterAndButton(visibleButtonEdit:true);
                 txtFilter.Watermark = "Введите название проекта";
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ProjectId") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ProjectId"), Width = DataGridLength.Auto});
                 dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название", Binding = new Avalonia.Data.Binding("ProjectName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Клиент", Binding = new Avalonia.Data.Binding("ClientInProjectNavigation.ClientName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата начала", Binding = new Avalonia.Data.Binding("StartDate") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата завершения", Binding = new Avalonia.Data.Binding("EndDate") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Статус", Binding = new Avalonia.Data.Binding("StatusNavigation.StatusName") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Клиент", Binding = new Avalonia.Data.Binding("ClientInProjectNavigation.ClientName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата начала", Binding = new Avalonia.Data.Binding("StartDate"), Width = DataGridLength.Auto});
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата завершения", Binding = new Avalonia.Data.Binding("EndDate"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Статус", Binding = new Avalonia.Data.Binding("StatusNavigation.StatusName"), Width = DataGridLength.Auto });
         
                 Projects = _context.Projects
                     .Include(p => p.ClientInProjectNavigation)
                     .Include(p => p.StatusNavigation)
+                    .OrderBy(p=> p.ProjectId)
                     .ToList();
                 dataGridContent.ItemsSource = Projects;
                 break;
 
             case "Clients":
-                VisibleFilter(true);
+                VisibleFilterAndButton();
                 txtFilter.Watermark = "Введите название организации";
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ClientId") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Имя", Binding = new Avalonia.Data.Binding("ClientName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Email", Binding = new Avalonia.Data.Binding("ClientEmail") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Телефон", Binding = new Avalonia.Data.Binding("ClientPhone") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ClientId"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Имя", Binding = new Avalonia.Data.Binding("ClientName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Email", Binding = new Avalonia.Data.Binding("ClientEmail"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Телефон", Binding = new Avalonia.Data.Binding("ClientPhone"), Width = DataGridLength.Auto });
 
-                Clients = _context.Clients.ToList();
+                Clients = _context.Clients
+                    .OrderBy(c=> c.ClientId)
+                    .ToList();
                 dataGridContent.ItemsSource = Clients;
                 break;
 
             case "Employees":
-                VisibleFilter(true);
+                VisibleFilterAndButton();
                 txtFilter.Watermark = "Введите фамилию сотрудника";
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("EmployeeId") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Фамилия", Binding = new Avalonia.Data.Binding("LastName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Имя", Binding = new Avalonia.Data.Binding("FirstName") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("EmployeeId"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Фамилия", Binding = new Avalonia.Data.Binding("LastName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Имя", Binding = new Avalonia.Data.Binding("FirstName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Отчество", Binding = new Avalonia.Data.Binding("MiddleName"), Width = DataGridLength.Auto });
                 dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Должность", Binding = new Avalonia.Data.Binding("Position") });
 
-                Employees = _context.Employees.ToList();
+                Employees = _context.Employees
+                    .OrderBy(e=> e.EmployeeId)
+                    .ToList();
                 dataGridContent.ItemsSource = Employees;
                 break;
 
             case "Tasks":
-                VisibleFilter(false);
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("TaskId") });
+                VisibleFilterAndButton(false);
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("TaskId"), Width = DataGridLength.Auto });
                 dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название задачи", Binding = new Avalonia.Data.Binding("TaskName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Описание", Binding = new Avalonia.Data.Binding("Description") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Проект", Binding = new Avalonia.Data.Binding("ProjectInTaskNavigation.ProjectName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Ответственный", Binding = new Avalonia.Data.Binding("AssignedToNavigation.LastName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Срок выполнения", Binding = new Avalonia.Data.Binding("Deadline") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Описание", Binding = new Avalonia.Data.Binding("Description"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Проект", Binding = new Avalonia.Data.Binding("ProjectInTaskNavigation.ProjectName"), Width = DataGridLength.Auto});
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Ответственный", Binding = new Avalonia.Data.Binding("AssignedToNavigation.Fullname") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Срок выполнения", Binding = new Avalonia.Data.Binding("Deadline"), Width = DataGridLength.Auto });
 
                 Tasks = _context.Tasks
                     .Include(t => t.ProjectInTaskNavigation)
                     .Include(t => t.AssignedToNavigation)
+                    .OrderBy(t=> t.TaskId)
                     .ToList();
                 dataGridContent.ItemsSource = Tasks;
 
@@ -131,17 +160,18 @@ public partial class TablesMain : Window
                 break;
             
             case "AdCompanies":
-                VisibleFilter(false);
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("CompanyId") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название кампании", Binding = new Avalonia.Data.Binding("CompanyName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Платформа", Binding = new Avalonia.Data.Binding("Platform") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Бюджет", Binding = new Avalonia.Data.Binding("Budget") });
+                VisibleFilterAndButton(false);
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("CompanyId"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название кампании", Binding = new Avalonia.Data.Binding("CompanyName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Платформа", Binding = new Avalonia.Data.Binding("Platform"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Бюджет", Binding = new Avalonia.Data.Binding("Budget"), Width = DataGridLength.Auto });
                 dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Проект", Binding = new Avalonia.Data.Binding("ProjectInCompanyNavigation.ProjectName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата начала", Binding = new Avalonia.Data.Binding("StartDate") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата завершения", Binding = new Avalonia.Data.Binding("EndDate") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата начала", Binding = new Avalonia.Data.Binding("StartDate"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата завершения", Binding = new Avalonia.Data.Binding("EndDate"), Width = DataGridLength.Auto });
 
                 AdCompanies = _context.AdCompanies
                     .Include(a => a.ProjectInCompanyNavigation)
+                    .OrderBy(a=> a.CompanyId)
                     .ToList();
                 dataGridContent.ItemsSource = AdCompanies;
 
@@ -152,17 +182,19 @@ public partial class TablesMain : Window
                 break;
             
             case "Reports":
-                VisibleFilter(false);
+                /*VisibleFilterAndButton(false, false);*/
+                VisibleFilterAndButton(false,false);
                 cmbFilterEmployees.IsVisible = true;
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ReportId") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название отчёта", Binding = new Avalonia.Data.Binding("ReportName") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ReportId"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название отчёта", Binding = new Avalonia.Data.Binding("ReportName"), Width = DataGridLength.Auto });
                 dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Проект", Binding = new Avalonia.Data.Binding("ProjectInReportNavigation.ProjectName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Автор отчёта", Binding = new Avalonia.Data.Binding("GeneratedByNavigation.FullName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата создания", Binding = new Avalonia.Data.Binding("GenerationDate") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Автор отчёта", Binding = new Avalonia.Data.Binding("GeneratedByNavigation.Fullname"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Дата создания", Binding = new Avalonia.Data.Binding("GenerationDate"), Width = DataGridLength.Auto });
 
                 Reports = _context.Reports
                     .Include(r => r.ProjectInReportNavigation)
                     .Include(r => r.GeneratedByNavigation)
+                    .OrderBy(r=>r.ReportId)
                     .ToList();
                 dataGridContent.ItemsSource = Reports;
 
@@ -174,20 +206,21 @@ public partial class TablesMain : Window
                 // Заполнение ComboBox для фильтрации по сотрудникам
                 var cmbEmployeesReports = this.FindControl<ComboBox>("cmbFilterEmployees");
                 cmbEmployeesReports.ItemsSource = _context.Employees.ToList();
-                cmbEmployeesReports.DisplayMemberBinding = new Avalonia.Data.Binding("LastName");
+                cmbEmployeesReports.DisplayMemberBinding = new Avalonia.Data.Binding("Fullname");
                 break;
             
             case "Specifications":
-                VisibleFilter(false);
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("SpecId") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название ТЗ", Binding = new Avalonia.Data.Binding("SpecName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Проект", Binding = new Avalonia.Data.Binding("ProjectInSpecificationNavigation.ProjectName") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Содержание", Binding = new Avalonia.Data.Binding("Content") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Автор ТЗ", Binding = new Avalonia.Data.Binding("CreatedByNavigation.FullName") });
+                VisibleFilterAndButton(false,false);
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("SpecId"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Название ТЗ", Binding = new Avalonia.Data.Binding("SpecName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Проект", Binding = new Avalonia.Data.Binding("ProjectInSpecificationNavigation.ProjectName"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Содержание", Binding = new Avalonia.Data.Binding("Content"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Автор ТЗ", Binding = new Avalonia.Data.Binding("CreatedByNavigation.Fullname") });
 
                 Specifications = _context.Specifications
                     .Include(s => s.ProjectInSpecificationNavigation)
                     .Include(s => s.CreatedByNavigation)
+                    .OrderBy(s=>s.SpecId)
                     .ToList();
                 dataGridContent.ItemsSource = Specifications;
 
@@ -198,11 +231,14 @@ public partial class TablesMain : Window
                 break;
             
             case "ProjectsStatus":
+                VisibleFilterAndButton(false,false);
                 PanelFilter.IsVisible = false;
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ProjectStatusId") });
-                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Статус", Binding = new Avalonia.Data.Binding("StatusName") });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "ID", Binding = new Avalonia.Data.Binding("ProjectStatusId"), Width = DataGridLength.Auto });
+                dataGridContent.Columns.Add(new DataGridTextColumn { Header = "Статус", Binding = new Avalonia.Data.Binding("StatusName"), Width = DataGridLength.Auto });
 
-                ProjectsStatuses = _context.ProjectsStatuses.ToList();
+                ProjectsStatuses = _context.ProjectsStatuses
+                    .OrderBy(p=>p.ProjectStatusId)
+                    .ToList();
                 dataGridContent.ItemsSource = ProjectsStatuses;
                 break;
         }
@@ -293,7 +329,7 @@ public partial class TablesMain : Window
                 break;
         }
     }
-    
+    // показать все записи
     private void btnAll_Click(object? sender, RoutedEventArgs e)
     {
         LoadDefaultTable();
@@ -302,10 +338,11 @@ public partial class TablesMain : Window
         cmbFilterProjects.SelectedItem = null;
     }
     
+    // кнопка для добавления данных в определённую таблицу
     private void BtnCreate_OnClick(object? sender, RoutedEventArgs e)
     {
         var selectedTable = cmbTables.SelectedItem?.ToString();
-        /*switch (selectedTable)
+        switch (selectedTable)
         {
             case "Projects":
                 var newProject = new Project();
@@ -322,12 +359,93 @@ public partial class TablesMain : Window
                 clientAdd.ClientAdded += () => LoadDefaultTable();
                 clientAdd.ShowDialog(this);
                 break;
+            
+            case "Tasks":
+                var newTask = new Task();
+                _context.Tasks.Add(newTask);
+                TaskAdd taskAdd = new TaskAdd(_context, newTask);
+                taskAdd.TaskAdded += () => LoadDefaultTable();
+                taskAdd.ShowDialog(this);
+                break;
+            
+            case "AdCompanies":
+                var newAdCompany = new AdCompany();
+                _context.AdCompanies.Add(newAdCompany);
+                AdCompanyAdd adCompanyAdd = new AdCompanyAdd(_context, newAdCompany);
+                adCompanyAdd.AdCompanyAdded += () => LoadDefaultTable();
+                adCompanyAdd.ShowDialog(this);
+                break;
+            
+            case "Employees":
+                var newEmployee = new Employee();
+                _context.Employees.Add(newEmployee);
+                EmployeeAdd employeeAdd = new EmployeeAdd(_context, newEmployee);
+                employeeAdd.EmployeeAdded += () => LoadDefaultTable();
+                employeeAdd.ShowDialog(this);
+                break;
 
             // Аналогично для остальных таблиц...
-        }*/
+        }
+    }
+    
+    // переход на форму редактирования выбранной записи
+    private void btnEdit_Click(object? sender, RoutedEventArgs e)
+    {
+        var selectedTable = cmbTables.SelectedItem?.ToString();
+        switch (selectedTable)
+        {
+            case "Projects":
+                var selectedProject = dataGridContent.SelectedItem as Project;
+                if (selectedProject == null) return;
+                var projectEdit = new ProjectEdit(_context, selectedProject);
+                projectEdit.ProjectUpdated += () => LoadDefaultTable();
+                projectEdit.ShowDialog(this);
+                break;
+            
+            /*case "AdCompanies":
+                var selectedAdCompany = dataGridContent.SelectedItem as AdCompany;
+                if (selectedAdCompany == null) return;
+                var adCompanyEdit = new AdCompanyEdit(_context, selectedAdCompany);
+                adCompanyEdit.AdCompanyUpdated += () => LoadDefaultTable();
+                adCompanyEdit.ShowDialog(this);
+                break;
+
+            case "Clients":
+                var selectedClient = dataGridContent.SelectedItem as Client;
+                if (selectedClient == null) return;
+                var clientEdit = new ClientEdit(_context, selectedClient);
+                clientEdit.ClientUpdated += () => LoadDefaultTable();
+                clientEdit.ShowDialog(this);
+                break;
+
+            case "Employees":
+                var selectedEmployee = dataGridContent.SelectedItem as Employee;
+                if (selectedEmployee == null) return;
+                var employeeEdit = new EmployeeEdit(_context, selectedEmployee);
+                employeeEdit.EmployeeUpdated += () => LoadDefaultTable();
+                employeeEdit.ShowDialog(this);
+                break;
+
+            case "Specifications":
+                var selectedSpecification = dataGridContent.SelectedItem as Specification;
+                if (selectedSpecification == null) return;
+                var specificationEdit = new SpecificationEdit(_context, selectedSpecification);
+                specificationEdit.SpecificationUpdated += () => LoadDefaultTable();
+                specificationEdit.ShowDialog(this);
+                break;
+
+            case "Tasks":
+                var selectedTask = dataGridContent.SelectedItem as Task;
+                if (selectedTask == null) return;
+                var taskEdit = new TaskEdit(_context, selectedTask);
+                taskEdit.TaskUpdated += () => LoadDefaultTable();
+                taskEdit.ShowDialog(this);
+                break;*/
+        }
     }
     
     
+    // удаление выделенной записи в определённой таблице
     private void btnDelete_click(object? sender, RoutedEventArgs e)
     {
         var selectedTable = cmbTables.SelectedItem?.ToString();
@@ -336,11 +454,17 @@ public partial class TablesMain : Window
             case "Projects":
                 var project = dataGridContent.SelectedItem as Project;
                 if (project == null) return;
+
+                // Удаляем все связанные задачи
+                var relatedTasks = _context.Tasks.Where(t => t.ProjectInTask == project.ProjectId).ToList();
+                _context.Tasks.RemoveRange(relatedTasks);
+
+                // Удаляем проект
                 _context.Projects.Remove(project);
                 _context.SaveChanges();
                 LoadDefaultTable();
                 break;
-
+            
             case "Clients":
                 var client = dataGridContent.SelectedItem as Client;
                 if (client == null) return;

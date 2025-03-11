@@ -140,6 +140,7 @@ E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\praktika.Gen
 E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\praktika.AssemblyInfoInputs.cache
 E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\praktika.AssemblyInfo.cs
 E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\praktika.csproj.CoreCompileInputs.cache
+E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\praktika.sourcelink.json
 E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\Avalonia\praktika.dll
 E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\Avalonia\praktika.pdb
 E:\Программы в VS code\praktika\praktika\obj\Debug\net8.0\refint\Avalonia\praktika.dll
